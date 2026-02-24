@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Roll Diameter Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 40px; }
+        input { padding: 8px; margin: 5px; width: 200px; }
+        button { padding: 10px 20px; margin-top: 10px; cursor: pointer; }
+        .result { margin-top: 20px; font-size: 20px; font-weight: bold; }
+        .contact { margin-top: 40px; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <h1>Paper Roll Diameter Calculator</h1>
+
+    <p>Enter Core Diameter (inches):</p>
+    <input type="number" id="core" step="0.01">
+
+    <p>Enter Paper Thickness (inches):</p>
+    <input type="number" id="thickness" step="0.0001">
+
+    <p>Enter Paper Length (inches):</p>
+    <input type="number" id="length" step="1">
+
+    <br>
+    <button onclick="calculate()">Calculate Roll Diameter</button>
+
+    <div class="result" id="result"></div>
+
+    <div class="contact">
+        <p><strong>Clifford Kempadoo</strong></p>
+        <p>Phone: 732-749-4105</p>
+        <p>Email: ckempadoo@directmaildepot.com</p>
+    </div>
+
+<script>
+function calculate() {
+    var core = parseFloat(document.getElementById("core").value);
+    var thickness = parseFloat(document.getElementById("thickness").value);
+    var length = parseFloat(document.getElementById("length").value);
+
+    if (isNaN(core) || isNaN(thickness) || isNaN(length)) {
+        document.getElementById("result").innerHTML = "Please fill in all fields.";
+        return;
+    }
+
+    var diameter = Math.sqrt((4 * length * thickness / Math.PI) + (core * core));
+    document.getElementById("result").innerHTML =
+        "Estimated Roll Diameter: " + diameter.toFixed(2) + " inches";
+}
+</script>
+
+</body>
+</html>
