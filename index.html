@@ -1,152 +1,57 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cliff_Roll_Diam — Enterprise Pro</title>
-<link rel="manifest" href="manifest.json">
+<title>Cliff Roll Diameter Calculator</title>
 <style>
-body{font-family:Arial;margin:0;background:#020617;color:#e5e7eb}
-.wrap{max-width:1100px;margin:auto;padding:16px}
-h2{margin-bottom:10px}
-.card{background:#0f172a;border-radius:14px;padding:16px;margin-bottom:14px}
-input,select,button{width:100%;padding:12px;margin-top:6px;border-radius:10px;background:#020617;color:white;border:1px solid #374151;font-size:15px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.big{font-size:18px}
-.stat{font-size:18px;font-weight:bold}
-.row{display:flex;gap:10px}
+body{font-family:Arial;background:#0f172a;color:white;margin:0;padding:20px}
+.card{max-width:600px;margin:auto;background:#020617;padding:20px;border-radius:12px}
+input,button{width:100%;padding:12px;margin-top:10px;border-radius:8px;border:1px solid #334155;background:#020617;color:white}
+button{font-size:18px;font-weight:bold}
+.result{font-size:20px;font-weight:bold}
 </style>
 </head>
 <body>
-<div class="wrap">
-<h2>Cliff_Roll_Diam — Enterprise Pro</h2>
-
 <div class="card">
-<div class="grid">
-<div><label>Press</label>
-<select id="press">
-<option>Truepress Jet520HD</option>
-<option>VarioStream 7450</option>
-<option>Inkjet Line</option>
-</select></div>
-<div><label>Job ID</label><input id="jobid"></div>
-<div><label>Paper Thickness (in)</label><input id="thickness" value="0.0055"></div>
-<div><label>Form Length (in)</label><input id="form" value="12"></div>
-<div><label>Core Diameter (in)</label><input id="core" value="3"></div>
-<div><label>Roll Diameter (in)</label><input id="roll"></div>
-</div>
-<button class="big" onclick="calc()">CALCULATE</button>
-<button onclick="saveRun()">SAVE RUN</button>
-</div>
+<h2>Cliff_Roll_Diam Calculator</h2>
 
-<div class="card">
-<div class="grid">
-<div><label>Forms</label><input id="forms" readonly class="stat"></div>
-<div><label>Feet</label><input id="feet" readonly class="stat"></div>
-<div><label>Pounds</label><input id="lbs" readonly class="stat"></div>
-<div><label>Splice</label><input id="splice" readonly class="stat"></div>
-</div>
-</div>
+<label>Paper Thickness (in)</label>
+<input id="thickness" value="0.0055">
 
-<div class="card">
-<h3>Shift Dashboard</h3>
-<div class="grid">
-<div><label>Total Forms This Shift</label><input id="shiftForms" readonly></div>
-<div><label>Total Runs Saved</label><input id="shiftRuns" readonly></div>
-</div>
-<button onclick="exportCSV()">Export Shift CSV</button>
-<button onclick="clearShift()">Reset Shift</button>
-</div>
+<label>Form Length (in)</label>
+<input id="form" value="12">
 
-<div class="card">
-<h3>Supervisor</h3>
-<div class="row">
-<button onclick="setPIN()">Set PIN</button>
-<button onclick="unlock()">Unlock Editing</button>
-</div>
-</div>
+<label>Core Diameter (in)</label>
+<input id="core" value="3">
+
+<label>Roll Diameter (in)</label>
+<input id="roll">
+
+<button onclick="calc()">CALCULATE</button>
+
+<label>Total Forms</label>
+<input id="forms" class="result" readonly>
+
+<label>Total Feet</label>
+<input id="feet" class="result" readonly>
 
 </div>
 
 <script>
-let shiftTotal=0;
-let shiftCount=0;
-let locked=false;
-
 function calc(){
-let t=parseFloat(thickness.value);
-let f=parseFloat(form.value);
-let c=parseFloat(core.value);
-let r=parseFloat(roll.value);
-if(!t||!f||!c||!r)return;
+let t=parseFloat(document.getElementById('thickness').value);
+let f=parseFloat(document.getElementById('form').value);
+let c=parseFloat(document.getElementById('core').value);
+let r=parseFloat(document.getElementById('roll').value);
+if(!t||!f||!c||!r){alert("Enter all values");return;}
+
 let length=(Math.PI*(r*r-c*c))/(4*t);
-let totalForms=(length/f);
-let totalFeet=(length/12);
-let pounds=(length*0.0000033);
-forms.value=totalForms.toFixed(0);
-feet.value=totalFeet.toFixed(0);
-lbs.value=pounds.toFixed(1);
-splice.value = r <= (c+2) ? "NEAR CORE" :
-               r <= (c+4) ? "PREPARE SPLICE" : "OK";
-}
+let forms=(length/f);
+let feet=(length/12);
 
-function saveRun(){
-if(!forms.value)return;
-let record={
-date:new Date().toISOString(),
-press:press.value,
-job:jobid.value,
-forms:forms.value,
-feet:feet.value,
-lbs:lbs.value
-};
-let logs=JSON.parse(localStorage.getItem("runs")||"[]");
-logs.push(record);
-localStorage.setItem("runs",JSON.stringify(logs));
-shiftTotal+=parseFloat(forms.value);
-shiftCount++;
-shiftForms.value=shiftTotal.toFixed(0);
-shiftRuns.value=shiftCount;
-}
-
-function exportCSV(){
-let logs=JSON.parse(localStorage.getItem("runs")||"[]");
-let csv="Date,Press,JobID,Forms,Feet,Pounds\n";
-logs.forEach(r=>{
-csv+=`${r.date},${r.press},${r.job},${r.forms},${r.feet},${r.lbs}\n`;
-});
-let blob=new Blob([csv],{type:"text/csv"});
-let url=URL.createObjectURL(blob);
-let a=document.createElement("a");
-a.href=url;
-a.download="shift_report.csv";
-a.click();
-}
-
-function clearShift(){
-localStorage.removeItem("runs");
-shiftTotal=0;
-shiftCount=0;
-shiftForms.value=0;
-shiftRuns.value=0;
-}
-
-function setPIN(){
-let pin=prompt("Set Supervisor PIN:");
-if(pin)localStorage.setItem("superPin",pin);
-}
-
-function unlock(){
-let pin=prompt("Enter Supervisor PIN:");
-if(pin===localStorage.getItem("superPin")){
-alert("Unlocked");
-}else{
-alert("Incorrect PIN");
-}
-}
-
-if('serviceWorker' in navigator){
-navigator.serviceWorker.register('sw.js');
+document.getElementById('forms').value=forms.toFixed(2);
+document.getElementById('feet').value=feet.toFixed(2);
 }
 </script>
 </body>
