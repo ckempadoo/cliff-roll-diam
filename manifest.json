@@ -1,8 +1,8 @@
 {
-"name":"Cliff Roll Diam Enterprise Pro",
-"short_name":"RollDiamPro",
-"start_url":"./index.html",
-"display":"standalone",
-"background_color":"#020617",
-"theme_color":"#020617"
+  "name": "Roll Diameter Calculator",
+  "short_name": "RollCalc",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#020617"
 }
