@@ -95,7 +95,18 @@ margin-bottom:20px;
 <h2>Roll Diameter Calculator</h2>
 
 <label>Paper Thickness</label>
-<input id="thickness" value="0.0055" oninput="calc()">
+<select id="thickness" onchange="calc()">
+
+<option value="0.0035">20# Bond (0.0035)</option>
+<option value="0.0040">24# Bond (0.0040)</option>
+<option value="0.0045">28# Bond (0.0045)</option>
+<option value="0.0050">60# Offset (0.0050)</option>
+<option value="0.0055" selected>70# Offset (0.0055)</option>
+<option value="0.0060">80# Offset (0.0060)</option>
+<option value="0.0070">100# Text (0.0070)</option>
+<option value="0.0090">10pt Cover (0.0090)</option>
+
+</select>
 
 <label>Form Length (in)</label>
 <input id="form" value="12" oninput="calc()">
