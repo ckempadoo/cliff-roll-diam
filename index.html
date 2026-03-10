@@ -1,43 +1,105 @@
 
 <!DOCTYPE html>
-<html><link rel="manifest" href="manifest.json">
-<head><meta name="theme-color" content="#020617">
+<html>
+<head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cliff Roll Diameter Calculator</title>
+<title>Pressroom Pro Roll Calculator</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#020617">
+
 <style>
-body{font-family:Arial;background:#0f172a;color:white;margin:0;padding:20px}
-.card{max-width:600px;margin:auto;background:#020617;padding:20px;border-radius:12px}
-input,button{width:100%;padding:12px;margin-top:10px;border-radius:8px;border:1px solid #334155;background:#020617;color:white}
-button{font-size:18px;font-weight:bold}
-.result{font-size:20px;font-weight:bold}
-</style>
-</head>
-<body>
-  <div style="
-background:#0f172a;
+
+body{
+font-family:Arial;
+background:#020617;
 color:white;
+margin:0;
+padding:20px;
+}
+
+.tabs{
+display:flex;
+gap:10px;
+margin-bottom:20px;
+}
+
+.tabbtn{
+flex:1;
+padding:12px;
+background:#0f172a;
+border:none;
+color:white;
+font-size:16px;
+border-radius:8px;
+cursor:pointer;
+}
+
+.tabbtn:hover{
+background:#1e293b;
+}
+
+.card{
+max-width:600px;
+margin:auto;
+background:#0f172a;
+padding:20px;
+border-radius:12px;
+}
+
+input{
+width:100%;
+padding:14px;
+margin-top:10px;
+border-radius:8px;
+border:1px solid #334155;
+background:#020617;
+color:white;
+font-size:16px;
+}
+
+.result{
+font-size:22px;
+font-weight:bold;
+}
+
+.banner{
+background:#0f172a;
 padding:10px;
 text-align:center;
 font-size:14px;
-">
-📱 Add to Home Screen for faster access
-</div>
-<div class="card">
-<h2>Cliff_Roll_Diam Calculator</h2>
+margin-bottom:20px;
+}
 
-<label>Paper Thickness (in)</label>
-<input id="thickness" value="0.0055">
+</style>
+</head>
+
+<body>
+
+<div class="banner">
+📱 Add to Home Screen for faster pressroom access
+</div>
+
+<div class="tabs">
+<button class="tabbtn" onclick="showTab('calc')">Roll Calculator</button>
+<button class="tabbtn" onclick="showTab('remain')">Roll Remaining</button>
+</div>
+
+<div id="calc" class="card">
+
+<h2>Roll Diameter Calculator</h2>
+
+<label>Paper Thickness</label>
+<input id="thickness" value="0.0055" oninput="calc()">
 
 <label>Form Length (in)</label>
-<input id="form" value="12">
+<input id="form" value="12" oninput="calc()">
 
-<label>Core Diameter (in)</label>
-<input id="core" value="3">
+<label>Core Diameter</label>
+<input id="core" value="3" oninput="calc()">
 
-<label>Roll Diameter (in)</label>
-<input id="roll">
-
-<button onclick="calc()">CALCULATE</button>
+<label>Roll Diameter</label>
+<input id="roll" oninput="calc()">
 
 <label>Total Forms</label>
 <input id="forms" class="result" readonly>
@@ -47,21 +109,71 @@ font-size:14px;
 
 </div>
 
+<div id="remain" class="card" style="display:none">
+
+<h2>Remaining Forms On Roll</h2>
+
+<label>Paper Thickness</label>
+<input id="thickness2" value="0.0055" oninput="remaining()">
+
+<label>Form Length</label>
+<input id="form2" value="12" oninput="remaining()">
+
+<label>Core Diameter</label>
+<input id="core2" value="3" oninput="remaining()">
+
+<label>Current Roll Diameter</label>
+<input id="roll2" oninput="remaining()">
+
+<label>Remaining Forms</label>
+<input id="forms2" class="result" readonly>
+
+<label>Remaining Feet</label>
+<input id="feet2" class="result" readonly>
+
+</div>
+
 <script>
-function calc(){
-let t=parseFloat(document.getElementById('thickness').value);
-let f=parseFloat(document.getElementById('form').value);
-let c=parseFloat(document.getElementById('core').value);
-let r=parseFloat(document.getElementById('roll').value);
-if(!t||!f||!c||!r){alert("Enter all values");return;}
 
-let length=(Math.PI*(r*r-c*c))/(4*t);
-let forms=(length/f);
-let feet=(length/12);
-
-document.getElementById('forms').value=forms.toFixed(2);
-document.getElementById('feet').value=feet.toFixed(2);
+function showTab(tab){
+document.getElementById("calc").style.display="none"
+document.getElementById("remain").style.display="none"
+document.getElementById(tab).style.display="block"
 }
+
+function calc(){
+
+let t=parseFloat(thickness.value)
+let f=parseFloat(form.value)
+let c=parseFloat(core.value)
+let r=parseFloat(roll.value)
+
+if(!t||!f||!c||!r)return
+
+let length=(Math.PI*(r*r-c*c))/(4*t)
+
+forms.value=(length/f).toFixed(0)
+feet.value=(length/12).toFixed(0)
+
+}
+
+function remaining(){
+
+let t=parseFloat(thickness2.value)
+let f=parseFloat(form2.value)
+let c=parseFloat(core2.value)
+let r=parseFloat(roll2.value)
+
+if(!t||!f||!c||!r)return
+
+let length=(Math.PI*(r*r-c*c))/(4*t)
+
+forms2.value=(length/f).toFixed(0)
+feet2.value=(length/12).toFixed(0)
+
+}
+
 </script>
+
 </body>
 </html>
