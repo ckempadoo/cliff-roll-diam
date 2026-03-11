@@ -196,17 +196,38 @@ document.getElementById("remain").style.display="none"
 document.getElementById(tab).style.display="block"
 }
 
-function calc(){
-function applyThickness(){
+<script>
 
-let preset=document.getElementById("thicknessPreset").value
+function calculate() {
 
-if(preset!=""){
-document.getElementById("thickness").value=preset
-calc()
+let thickness = parseFloat(document.getElementById("paperThickness").value);
+let form = parseFloat(document.getElementById("formLength").value);
+let core = parseFloat(document.getElementById("coreDiameter").value);
+let roll = parseFloat(document.getElementById("rollDiameter").value);
+
+if(!thickness || !form || !core || !roll) return;
+
+let length = (Math.PI * (roll*roll - core*core)) / (4 * thickness);
+
+let forms = length / form;
+
+document.getElementById("totalForms").value = forms.toFixed(0);
+
+}
+
+
+function applyPreset() {
+
+let preset = document.getElementById("presetThickness").value;
+
+if(preset !== ""){
+document.getElementById("paperThickness").value = preset;
+calculate();
 }
 
 }
+
+</script>
 let t=parseFloat(thickness.value)
 let f=parseFloat(form.value)
 let c=parseFloat(core.value)
