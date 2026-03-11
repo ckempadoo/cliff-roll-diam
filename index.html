@@ -144,17 +144,30 @@ margin-bottom:20px;
 
 <h2>Remaining Forms On Roll</h2>
 
-<label>Paper Thickness</label>
-<select id="thickness2" onchange="remaining()">
+<label>Paper Thickness (inches)</label>
 
+<select id="presetThickness" onchange="applyPreset()">
+<option value="">Select common paper</option>
 <option value="0.0035">20# Bond</option>
 <option value="0.0040">24# Bond</option>
-<option value="0.0045">28# Bond</option>
 <option value="0.0050">60# Offset</option>
-<option value="0.0055" selected>70# Offset</option>
+<option value="0.0055">70# Offset</option>
 <option value="0.0060">80# Offset</option>
 <option value="0.0070">100# Text</option>
-<option value="0.0090">10pt Cover</option>
+<option value="0.0090">Self Mailer Light</option>
+<option value="0.0110">Self Mailer Medium</option>
+<option value="0.0130">Self Mailer Heavy</option>
+<option value="0.0160">14pt Cover</option>
+<option value="0.0180">16pt Cover</option>
+</select>
+
+<input 
+type="number"
+step="0.0001"
+id="paperThickness"
+placeholder="Or type custom thickness"
+oninput="calculate()"
+>
 
 </select>
 
