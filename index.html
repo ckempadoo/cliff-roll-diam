@@ -1,153 +1,73 @@
-
 <!DOCTYPE html>
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js');
-}
-</script>
+
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pressroom Pro Roll Calculator</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#020617">
+<title>Pressroom Roll Calculator</title>
 
 <style>
-
 body{
 font-family:Arial;
-background:#020617;
-color:white;
-margin:0;
+background:#f4f6f8;
+text-align:center;
 padding:20px;
 }
 
-.tabs{
-display:flex;
-gap:10px;
-margin-bottom:20px;
+h1{
+margin-bottom:5px;
 }
 
-.tabbtn{
-flex:1;
-padding:12px;
-background:#0f172a;
-border:none;
-color:white;
-font-size:16px;
-border-radius:8px;
-cursor:pointer;
-}
-
-.tabbtn:hover{
-background:#1e293b;
-}
-
-.card{
-max-width:600px;
+.container{
+background:white;
+padding:25px;
+border-radius:10px;
+max-width:420px;
 margin:auto;
-background:#0f172a;
-padding:20px;
-border-radius:12px;
+box-shadow:0 4px 12px rgba(0,0,0,0.15);
 }
 
-input{
-width:100%;
-padding:14px;
-margin-top:10px;
-border-radius:8px;
-border:1px solid #334155;
-background:#020617;
-color:white;
-font-size:16px;
-}
-
-.result{
-font-size:22px;
+label{
+display:block;
+margin-top:12px;
 font-weight:bold;
 }
 
-.banner{
-background:#0f172a;
+input,select{
+width:100%;
 padding:10px;
-text-align:center;
-font-size:14px;
-margin-bottom:20px;
+margin-top:5px;
+font-size:16px;
+border-radius:6px;
+border:1px solid #ccc;
 }
 
+.result{
+background:#eef7ff;
+font-weight:bold;
+}
+
+.footer{
+margin-top:15px;
+font-size:12px;
+color:#666;
+}
 </style>
+
 </head>
 
 <body>
 
-<div class="banner">
-📱 Add to Home Screen for faster pressroom access
-</div>
+<div class="container">
 
-<div class="tabs">
-<button class="tabbtn" onclick="showTab('calc')">Roll Calculator</button>
-<button class="tabbtn" onclick="showTab('remain')">Roll Remaining</button>
-</div>
-
-<div id="calc" class="card">
-
-<h2>Roll Diameter Calculator</h2>
+<h1>Roll Calculator</h1>
+<p>Pressroom Paper Roll Estimator</p>
 
 <label>Paper Thickness</label>
 
-<select id="thicknessPreset" onchange="applyThickness()">
-
-<option value="">Custom / Type Your Own</option>
-
-<option value="0.0035">20# Bond (0.0035)</option>
-<option value="0.0040">24# Bond (0.0040)</option>
-<option value="0.0045">28# Bond (0.0045)</option>
-
-<option value="0.0050">60# Offset (0.0050)</option>
-<option value="0.0055">70# Offset (0.0055)</option>
-<option value="0.0060">80# Offset (0.0060)</option>
-
-<option value="0.0070">100# Text (0.0070)</option>
-
-<option value="0.0090">10pt Cover (0.0090)</option>
-
-<option value="0.0105">Self Mailer Light (0.0105)</option>
-<option value="0.0120">Self Mailer Medium (0.0120)</option>
-<option value="0.0140">Self Mailer Heavy (0.0140)</option>
-
-<option value="0.0160">14pt Postcard (0.0160)</option>
-<option value="0.0180">16pt Postcard (0.0180)</option>
-
-</select>
-
-<input id="thickness" value="0.0055" oninput="calculate()">
-
-<label>Form Length (in)</label>
-<input id="form" value="12" oninput="calc()">
-
-<label>Core Diameter</label>
-<input id="core" value="3" oninput="calc()">
-
-<label>Roll Diameter</label>
-<input id="roll" oninput="calc()">
-
-<label>Total Forms</label>
-<input id="forms" class="result" readonly>
-
-<label>Total Feet</label>
-<input id="feet" class="result" readonly>
-
-</div>
-
-<div id="remain" class="card" style="display:none">
-
-<h2>Remaining Forms On Roll</h2>
-
-<label>Paper Thickness (inches)</label>
-
 <select id="presetThickness" onchange="applyPreset()">
-<option value="">Select common paper</option>
+<option value="">Select Common Stock</option>
 <option value="0.0035">20# Bond</option>
 <option value="0.0040">24# Bond</option>
 <option value="0.0050">60# Offset</option>
@@ -161,77 +81,32 @@ margin-bottom:20px;
 <option value="0.0180">16pt Cover</option>
 </select>
 
-<input 
-type="number"
+<input
+id="thickness"
+value="0.0055"
 step="0.0001"
-id="paperThickness"
-placeholder="Or type custom thickness"
 oninput="calculate()"
+placeholder="Or type custom thickness"
+
 >
 
-</select>
+<label>Form Length (in)</label> <input id="form" value="12" oninput="calculate()">
 
-<label>Form Length</label>
-<input id="form2" value="12" oninput="remaining()">
+<label>Core Diameter (in)</label> <input id="core" value="3" oninput="calculate()">
 
-<label>Core Diameter</label>
-<input id="core2" value="3" oninput="remaining()">
+<label>Roll Diameter (in)</label> <input id="roll" oninput="calculate()">
 
-<label>Current Roll Diameter</label>
-<input id="roll2" oninput="remaining()">
+<label>Total Forms</label> <input id="forms" class="result" readonly>
 
-<label>Remaining Forms</label>
-<input id="forms2" class="result" readonly>
+<label>Total Feet</label> <input id="feet" class="result" readonly>
 
-<label>Remaining Feet</label>
-<input id="feet2" class="result" readonly>
+<div class="footer">
+Direct Mail Depot • Pressroom Tool
+</div>
 
 </div>
 
 <script>
-
-function showTab(tab){
-document.getElementById("calc").style.display="none"
-document.getElementById("remain").style.display="none"
-document.getElementById(tab).style.display="block"
-}
-
-<script>
-
-function calculate() {
-
-let thickness = parseFloat(document.getElementById("paperThickness").value);
-let form = parseFloat(document.getElementById("formLength").value);
-let core = parseFloat(document.getElementById("coreDiameter").value);
-let roll = parseFloat(document.getElementById("rollDiameter").value);
-
-if(!thickness || !form || !core || !roll) return;
-
-let length = (Math.PI * (roll*roll - core*core)) / (4 * thickness);
-
-let forms = length / form;
-
-document.getElementById("totalForms").value = forms.toFixed(0);
-
-}
-
-
-function applyPreset() {
-
-let preset = document.getElementById("presetThickness").value;
-
-if(preset !== ""){
-document.getElementById("paperThickness").value = preset;
-calculate();
-}
-
-}
-
-</script>
-
-
-</body>
-  <script>
 
 function calculate(){
 
@@ -240,12 +115,15 @@ let f=parseFloat(document.getElementById("form").value)
 let c=parseFloat(document.getElementById("core").value)
 let r=parseFloat(document.getElementById("roll").value)
 
-if(!t||!f||!c||!r)return
+if(!t || !f || !c || !r) return
 
 let length=(Math.PI*(r*r-c*c))/(4*t)
 
-document.getElementById("forms").value=(length/f).toFixed(0)
-document.getElementById("feet").value=(length/12).toFixed(0)
+let forms=length/f
+let feet=length/12
+
+document.getElementById("forms").value=forms.toFixed(0)
+document.getElementById("feet").value=feet.toFixed(0)
 
 }
 
@@ -261,4 +139,6 @@ calculate()
 }
 
 </script>
+
+</body>
 </html>
