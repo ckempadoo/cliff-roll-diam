@@ -228,37 +228,7 @@ calculate();
 }
 
 </script>
-let t=parseFloat(thickness.value)
-let f=parseFloat(form.value)
-let c=parseFloat(core.value)
-let r=parseFloat(roll.value)
 
-if(!t||!f||!c||!r)return
-
-let length=(Math.PI*(r*r-c*c))/(4*t)
-
-forms.value=(length/f).toFixed(0)
-feet.value=(length/12).toFixed(0)
-
-}
-
-function remaining(){
-
-let t=parseFloat(thickness2.value)
-let f=parseFloat(form2.value)
-let c=parseFloat(core2.value)
-let r=parseFloat(roll2.value)
-
-if(!t||!f||!c||!r)return
-
-let length=(Math.PI*(r*r-c*c))/(4*t)
-
-forms2.value=(length/f).toFixed(0)
-feet2.value=(length/12).toFixed(0)
-
-}
-
-</script>
 
 </body>
 </html>
