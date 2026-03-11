@@ -231,4 +231,34 @@ calculate();
 
 
 </body>
+  <script>
+
+function calculate(){
+
+let t=parseFloat(document.getElementById("thickness").value)
+let f=parseFloat(document.getElementById("form").value)
+let c=parseFloat(document.getElementById("core").value)
+let r=parseFloat(document.getElementById("roll").value)
+
+if(!t||!f||!c||!r)return
+
+let length=(Math.PI*(r*r-c*c))/(4*t)
+
+document.getElementById("forms").value=(length/f).toFixed(0)
+document.getElementById("feet").value=(length/12).toFixed(0)
+
+}
+
+function applyPreset(){
+
+let preset=document.getElementById("presetThickness").value
+
+if(preset!=""){
+document.getElementById("thickness").value=preset
+calculate()
+}
+
+}
+
+</script>
 </html>
