@@ -95,18 +95,33 @@ margin-bottom:20px;
 <h2>Roll Diameter Calculator</h2>
 
 <label>Paper Thickness</label>
-<select id="thickness" onchange="calc()">
+
+<select id="thicknessPreset" onchange="applyThickness()">
+
+<option value="">Custom / Type Your Own</option>
 
 <option value="0.0035">20# Bond (0.0035)</option>
 <option value="0.0040">24# Bond (0.0040)</option>
 <option value="0.0045">28# Bond (0.0045)</option>
+
 <option value="0.0050">60# Offset (0.0050)</option>
-<option value="0.0055" selected>70# Offset (0.0055)</option>
+<option value="0.0055">70# Offset (0.0055)</option>
 <option value="0.0060">80# Offset (0.0060)</option>
+
 <option value="0.0070">100# Text (0.0070)</option>
+
 <option value="0.0090">10pt Cover (0.0090)</option>
 
+<option value="0.0105">Self Mailer Light (0.0105)</option>
+<option value="0.0120">Self Mailer Medium (0.0120)</option>
+<option value="0.0140">Self Mailer Heavy (0.0140)</option>
+
+<option value="0.0160">14pt Postcard (0.0160)</option>
+<option value="0.0180">16pt Postcard (0.0180)</option>
+
 </select>
+
+<input id="thickness" value="0.0055" oninput="calc()" placeholder="Or type custom thickness">
 
 <label>Form Length (in)</label>
 <input id="form" value="12" oninput="calc()">
@@ -169,7 +184,16 @@ document.getElementById(tab).style.display="block"
 }
 
 function calc(){
+function applyThickness(){
 
+let preset=document.getElementById("thicknessPreset").value
+
+if(preset!=""){
+document.getElementById("thickness").value=preset
+calc()
+}
+
+}
 let t=parseFloat(thickness.value)
 let f=parseFloat(form.value)
 let c=parseFloat(core.value)
